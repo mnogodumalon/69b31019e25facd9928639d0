@@ -9,7 +9,7 @@ import {
   TableHeader, TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Trash2, Plus, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { IconPencil, IconTrash, IconPlus, IconSearch, IconArrowsUpDown, IconArrowUp, IconArrowDown } from '@tabler/icons-react';
 import { KursVerwaltungDialog } from '@/components/dialogs/KursVerwaltungDialog';
 import { KursVerwaltungViewDialog } from '@/components/dialogs/KursVerwaltungViewDialog';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
@@ -123,12 +123,12 @@ export default function KursVerwaltungPage() {
       subtitle={`${records.length} Kurs-Verwaltung im System`}
       action={
         <Button onClick={() => setDialogOpen(true)} className="shrink-0 rounded-full shadow-sm">
-          <Plus className="h-4 w-4 mr-2" /> Hinzufügen
+          <IconPlus className="h-4 w-4 mr-2" /> Hinzufügen
         </Button>
       }
     >
       <div className="relative w-full max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Kurs-Verwaltung suchen..."
           value={search}
@@ -143,79 +143,79 @@ export default function KursVerwaltungPage() {
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('kursgebuehr')}>
                 <span className="inline-flex items-center gap-1">
                   Kursgebühr (€)
-                  {sortKey === 'kursgebuehr' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'kursgebuehr' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('kursname')}>
                 <span className="inline-flex items-center gap-1">
                   Kursname
-                  {sortKey === 'kursname' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'kursname' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('kursbeschreibung')}>
                 <span className="inline-flex items-center gap-1">
                   Kursbeschreibung
-                  {sortKey === 'kursbeschreibung' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'kursbeschreibung' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('yoga_stil_kurs')}>
                 <span className="inline-flex items-center gap-1">
                   Yoga-Stil
-                  {sortKey === 'yoga_stil_kurs' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'yoga_stil_kurs' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('niveau')}>
                 <span className="inline-flex items-center gap-1">
                   Kursniveau
-                  {sortKey === 'niveau' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'niveau' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('kursleiter')}>
                 <span className="inline-flex items-center gap-1">
                   Kursleiter
-                  {sortKey === 'kursleiter' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'kursleiter' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('wochentag')}>
                 <span className="inline-flex items-center gap-1">
                   Wochentag
-                  {sortKey === 'wochentag' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'wochentag' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('startzeit')}>
                 <span className="inline-flex items-center gap-1">
                   Startzeit
-                  {sortKey === 'startzeit' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'startzeit' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('endzeit')}>
                 <span className="inline-flex items-center gap-1">
                   Endzeit
-                  {sortKey === 'endzeit' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'endzeit' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('startdatum')}>
                 <span className="inline-flex items-center gap-1">
                   Startdatum
-                  {sortKey === 'startdatum' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'startdatum' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('enddatum')}>
                 <span className="inline-flex items-center gap-1">
                   Enddatum
-                  {sortKey === 'enddatum' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'enddatum' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('ort')}>
                 <span className="inline-flex items-center gap-1">
                   Ort / Raum
-                  {sortKey === 'ort' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'ort' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('max_teilnehmer')}>
                 <span className="inline-flex items-center gap-1">
                   Maximale Teilnehmerzahl
-                  {sortKey === 'max_teilnehmer' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'max_teilnehmer' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="w-24 uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6">Aktionen</TableHead>
@@ -240,10 +240,10 @@ export default function KursVerwaltungPage() {
                 <TableCell>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => setEditingRecord(record)}>
-                      <Pencil className="h-4 w-4" />
+                      <IconPencil className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(record)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <IconTrash className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
                 </TableCell>

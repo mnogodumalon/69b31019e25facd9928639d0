@@ -29,6 +29,27 @@ export function useDashboardData() {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
+  // Silent background refresh (no loading state change → no flicker)
+  useEffect(() => {
+    async function silentRefresh() {
+      try {
+        const [kursleiterVerwaltungData, kursVerwaltungData, teilnehmerAnmeldungData] = await Promise.all([
+          LivingAppsService.getKursleiterVerwaltung(),
+          LivingAppsService.getKursVerwaltung(),
+          LivingAppsService.getTeilnehmerAnmeldung(),
+        ]);
+        setKursleiterVerwaltung(kursleiterVerwaltungData);
+        setKursVerwaltung(kursVerwaltungData);
+        setTeilnehmerAnmeldung(teilnehmerAnmeldungData);
+      } catch {
+        // silently ignore — stale data is better than no data
+      }
+    }
+    function handleRefresh() { void silentRefresh(); }
+    window.addEventListener('dashboard-refresh', handleRefresh);
+    return () => window.removeEventListener('dashboard-refresh', handleRefresh);
+  }, []);
+
   const kursleiterVerwaltungMap = useMemo(() => {
     const m = new Map<string, KursleiterVerwaltung>();
     kursleiterVerwaltung.forEach(r => m.set(r.record_id, r));

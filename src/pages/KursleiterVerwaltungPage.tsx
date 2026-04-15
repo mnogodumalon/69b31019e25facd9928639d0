@@ -9,7 +9,7 @@ import {
   TableHeader, TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Trash2, Plus, Search, ArrowUpDown, ArrowUp, ArrowDown, FileText } from 'lucide-react';
+import { IconPencil, IconTrash, IconPlus, IconSearch, IconArrowsUpDown, IconArrowUp, IconArrowDown, IconFileText } from '@tabler/icons-react';
 import { KursleiterVerwaltungDialog } from '@/components/dialogs/KursleiterVerwaltungDialog';
 import { KursleiterVerwaltungViewDialog } from '@/components/dialogs/KursleiterVerwaltungViewDialog';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
@@ -104,12 +104,12 @@ export default function KursleiterVerwaltungPage() {
       subtitle={`${records.length} Kursleiter-Verwaltung im System`}
       action={
         <Button onClick={() => setDialogOpen(true)} className="shrink-0 rounded-full shadow-sm">
-          <Plus className="h-4 w-4 mr-2" /> Hinzufügen
+          <IconPlus className="h-4 w-4 mr-2" /> Hinzufügen
         </Button>
       }
     >
       <div className="relative w-full max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Kursleiter-Verwaltung suchen..."
           value={search}
@@ -124,43 +124,43 @@ export default function KursleiterVerwaltungPage() {
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('vorname')}>
                 <span className="inline-flex items-center gap-1">
                   Vorname
-                  {sortKey === 'vorname' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'vorname' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('nachname')}>
                 <span className="inline-flex items-center gap-1">
                   Nachname
-                  {sortKey === 'nachname' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'nachname' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('telefon')}>
                 <span className="inline-flex items-center gap-1">
                   Telefonnummer
-                  {sortKey === 'telefon' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'telefon' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('yoga_stil')}>
                 <span className="inline-flex items-center gap-1">
                   Yoga-Spezialisierungen
-                  {sortKey === 'yoga_stil' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'yoga_stil' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('biografie')}>
                 <span className="inline-flex items-center gap-1">
                   Kurzbeschreibung / Biografie
-                  {sortKey === 'biografie' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'biografie' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('foto')}>
                 <span className="inline-flex items-center gap-1">
                   Foto
-                  {sortKey === 'foto' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'foto' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('email')}>
                 <span className="inline-flex items-center gap-1">
                   E-Mail-Adresse
-                  {sortKey === 'email' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'email' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="w-24 uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6">Aktionen</TableHead>
@@ -174,15 +174,15 @@ export default function KursleiterVerwaltungPage() {
                 <TableCell>{record.fields.telefon ?? '—'}</TableCell>
                 <TableCell>{Array.isArray(record.fields.yoga_stil) ? record.fields.yoga_stil.map((v: any) => v?.label ?? v).join(', ') : '—'}</TableCell>
                 <TableCell className="max-w-xs"><span className="truncate block">{record.fields.biografie ?? '—'}</span></TableCell>
-                <TableCell>{record.fields.foto ? <div className="relative h-8 w-8 rounded bg-muted overflow-hidden"><div className="absolute inset-0 flex items-center justify-center"><FileText size={14} className="text-muted-foreground" /></div><img src={record.fields.foto} alt="" className="relative h-full w-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} /></div> : '—'}</TableCell>
+                <TableCell>{record.fields.foto ? <div className="relative h-8 w-8 rounded bg-muted overflow-hidden"><div className="absolute inset-0 flex items-center justify-center"><IconFileText size={14} className="text-muted-foreground" /></div><img src={record.fields.foto} alt="" className="relative h-full w-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} /></div> : '—'}</TableCell>
                 <TableCell>{record.fields.email ?? '—'}</TableCell>
                 <TableCell>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => setEditingRecord(record)}>
-                      <Pencil className="h-4 w-4" />
+                      <IconPencil className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(record)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <IconTrash className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
                 </TableCell>

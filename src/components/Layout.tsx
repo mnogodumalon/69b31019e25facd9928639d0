@@ -1,30 +1,28 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { BookOpen, LayoutDashboard, Menu, Settings, Undo2, Users } from 'lucide-react';
+import { Outlet } from 'react-router-dom';
+import { IconAlertCircle, IconArrowBackUp, IconMenu2 } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import ChatWidget from '@/components/ChatWidget';
+import { ActionInputDialog } from '@/components/ActionInputDialog';
 import { TopBar } from '@/components/TopBar';
+import ActionsBar from '@/components/ActionsBar';
+import { useActions } from '@/context/ActionsContext';
+import { Button } from '@/components/ui/button';
+import { VersionCheck } from '@/components/VersionCheck';
 
-// ⚡ Customize these for your app
 const APP_TITLE = 'Yoga Kurs Manager';
 
 const IS_EMBED = new URLSearchParams(window.location.search).has('embed') || window.navigator.userAgent.startsWith('LivingAppsMobile');
 
-const navigation = [
-  { name: 'Übersicht', href: '/', icon: LayoutDashboard },
-  { name: 'Kursleiter-Verwaltung', href: '/kursleiter-verwaltung', icon: BookOpen },
-  { name: 'Kurs-Verwaltung', href: '/kurs-verwaltung', icon: BookOpen },
-  { name: 'Teilnehmer-Anmeldung', href: '/teilnehmer-anmeldung', icon: Users },
-];
-
-const externalNavigation = [
-  { name: 'Kursleiter-Verwaltung', href: '/gateway/apps/69b30fff0a134593baec686c?template=list_page', icon: BookOpen },
-  { name: 'Kurs-Verwaltung', href: '/gateway/apps/69b31003a9aa2b70f81275a4?template=list_page', icon: BookOpen },
-  { name: 'Teilnehmer-Anmeldung', href: '/gateway/apps/69b310033fe9f7cfd2c5e838?template=list_page', icon: Users },
-];
-
 export function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { inputFormAction, inputFormOptions, submitActionInputs, cancelInputForm } = useActions();
+  const [authError, setAuthError] = useState(false);
   useEffect(() => { document.title = APP_TITLE; }, []);
+  useEffect(() => {
+    const handler = () => setAuthError(true);
+    window.addEventListener('auth-error', handler);
+    return () => window.removeEventListener('auth-error', handler);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -36,7 +34,7 @@ export function Layout() {
               className="lg:hidden p-2 rounded-lg hover:bg-accent transition-colors"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              <Menu size={18} />
+              <IconMenu2 size={18} />
             </button>
             <svg className="hidden lg:block w-9 h-9 shrink-0" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18.6162 33.9164L20.4429 36.4084C20.4429 36.4084 13.4064 39.5929 9.85984 41.6434C7.73514 42.8719 6.93751 43.762 7.68335 44.356C8.00045 44.6086 18.7719 52.7814 19.1375 53.0247C23.2398 55.7549 15.79 45.2036 15.79 45.2036C15.79 45.2036 26.3397 41.899 28.5944 39.281C30.8491 36.6629 28.9112 33.9164 28.9112 33.9164C28.9112 33.9164 33.0253 35.5016 33.1876 39.281C33.289 41.6444 30.466 46.5779 28.9632 50.3787C28.063 52.6557 27.6349 53.4537 28.5898 53.4582C28.9958 53.4601 43.3581 53.5103 43.7947 53.4582C46.5726 53.1267 36.1923 50.3787 36.1923 50.3787C36.1923 50.3787 40.934 43.8566 42.0571 39.7543C42.7914 37.072 40.4732 33.4431 40.4732 33.4431C40.4732 33.4431 50.6098 36.1253 51.4017 35.4942C52.1937 34.8631 49.026 26.6585 49.026 26.6585C49.026 26.6585 57 22.8756 57 21.4556C57 20.0356 49.171 16.4028 49.171 16.4028C49.171 16.4028 49.8179 9.14493 48.3924 8.35603C46.967 7.56713 36.672 11.996 36.672 11.996C36.672 11.996 31.7464 3.51825 28.8955 3.51825C26.0446 3.51825 20.5168 11.996 20.5168 11.996C20.5168 11.996 11.3306 7.25157 10.0635 7.88269C8.79641 8.51381 8.47964 16.4028 8.47964 16.4028C8.47964 16.4028 0 20.1818 0 21.6019C0 23.0219 8.9548 26.6585 8.9548 26.6585C8.9548 26.6585 6.10388 35.0209 7.21257 35.4942C8.32126 35.9676 18.6162 33.9164 18.6162 33.9164Z" fill="#FF5C00"/>
@@ -74,87 +72,14 @@ export function Layout() {
             href="/gateway/apps/69b30fff0a134593baec686c?template=list_page"
             className="flex items-center gap-2 px-4 py-2 rounded-2xl text-base transition-colors min-w-0 text-sidebar-foreground font-normal hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
           >
-            <Undo2 size={16} className="shrink-0" />
+            <IconArrowBackUp size={16} className="shrink-0" />
             <span className="truncate">Zurück</span>
           </a>
-          <p className="px-4 pb-2 pt-2 text-xs font-medium text-muted-foreground">
-            Navigation
-          </p>
-          {/* Overview link */}
-          {navigation.slice(0, 1).map(item => {
-            const Icon = item.icon;
-            return (
-            <NavLink
-              key={item.href}
-              to={item.href}
-              end
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }: { isActive: boolean }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-2xl text-base transition-colors min-w-0 ${
-                  isActive
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-                    : 'text-sidebar-foreground font-normal hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-                }`
-              }
-            >
-              <Icon size={16} className="shrink-0" />
-              <span className="truncate">{item.name}</span>
-            </NavLink>
-            );
-          })}
-          {/* Entity links (external) */}
-          {externalNavigation.map(item => {
-            const Icon = item.icon;
-            return (
-            <a
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-base transition-colors min-w-0 text-sidebar-foreground font-normal hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-            >
-              <Icon size={16} className="shrink-0" />
-              <span className="truncate">{item.name}</span>
-            </a>
-            );
-          })}
-          {/* CRUD page links (hidden via .nav-crud-item { display: none } in index.css) */}
-          {navigation.slice(1).map(item => {
-            const Icon = item.icon;
-            return (
-            <NavLink
-              key={item.href}
-              to={item.href}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }: { isActive: boolean }) =>
-                `nav-crud-item flex items-center gap-2 px-4 py-2 rounded-2xl text-base transition-colors min-w-0 ${
-                  isActive
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-                    : 'text-sidebar-foreground font-normal hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-                }`
-              }
-            >
-              <Icon size={16} className="shrink-0" />
-              <span className="truncate">{item.name}</span>
-            </NavLink>
-            );
-          })}
         </nav>
 
         <div className="mt-auto px-3 pb-4">
           <div className="border-t border-sidebar-border pt-3">
-            <NavLink
-              to='/admin'
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }: { isActive: boolean }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-2xl text-base transition-colors ${
-                  isActive
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-                    : 'text-sidebar-foreground/60 font-normal hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-                }`
-              }
-            >
-              <Settings size={16} className="shrink-0" />
-              <span className="truncate">Verwaltung</span>
-            </NavLink>
+            <VersionCheck />
           </div>
         </div>
         </div>
@@ -163,11 +88,36 @@ export function Layout() {
 
       <div className={IS_EMBED ? "" : "lg:pl-72"} style={IS_EMBED ? undefined : { paddingTop: 'var(--topbar-h)' }}>
         <main className={`max-w-screen-2xl ${IS_EMBED ? "p-2 lg:p-4" : "p-6 lg:p-8"}`}>
-          <Outlet />
+          {!IS_EMBED && !authError && <ActionsBar />}
+          {authError ? (
+            <div className="flex flex-col items-center justify-center py-24 gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-destructive/10 flex items-center justify-center">
+                <IconAlertCircle size={22} className="text-destructive" />
+              </div>
+              <div className="text-center">
+                <h3 className="font-semibold text-foreground mb-1">Du bist nicht angemeldet.</h3>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => {
+                window.location.href = `${window.location.origin}/login.htm?cugCoUrl=${encodeURIComponent(window.location.href)}`;
+              }}>Anmelden</Button>
+            </div>
+          ) : (
+            <Outlet />
+          )}
         </main>
       </div>
 
       {!IS_EMBED && <ChatWidget />}
+
+      {inputFormAction && inputFormAction.metadata?.input_schema && (
+        <ActionInputDialog
+          action={inputFormAction}
+          schema={inputFormAction.metadata.input_schema}
+          options={inputFormOptions}
+          onSubmit={(inputs, files) => submitActionInputs(inputFormAction, inputs, files)}
+          onCancel={cancelInputForm}
+        />
+      )}
     </div>
   );
 }

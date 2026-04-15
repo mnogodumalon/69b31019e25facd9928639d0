@@ -65,15 +65,15 @@ export const APP_IDS = {
 
 
 export const LOOKUP_OPTIONS: Record<string, Record<string, {key: string, label: string}[]>> = {
-  kursleiter_verwaltung: {
+  'kursleiter_verwaltung': {
     yoga_stil: [{ key: "hatha", label: "Hatha Yoga" }, { key: "vinyasa", label: "Vinyasa Yoga" }, { key: "yin", label: "Yin Yoga" }, { key: "ashtanga", label: "Ashtanga Yoga" }, { key: "kundalini", label: "Kundalini Yoga" }, { key: "restorative", label: "Restorative Yoga" }, { key: "power", label: "Power Yoga" }, { key: "bikram", label: "Bikram Yoga" }],
   },
-  kurs_verwaltung: {
+  'kurs_verwaltung': {
     yoga_stil_kurs: [{ key: "vinyasa", label: "Vinyasa Yoga" }, { key: "hatha", label: "Hatha Yoga" }, { key: "yin", label: "Yin Yoga" }, { key: "ashtanga", label: "Ashtanga Yoga" }, { key: "kundalini", label: "Kundalini Yoga" }, { key: "restorative", label: "Restorative Yoga" }, { key: "power", label: "Power Yoga" }, { key: "bikram", label: "Bikram Yoga" }],
     niveau: [{ key: "anfaenger", label: "Anfänger" }, { key: "mittelstufe", label: "Mittelstufe" }, { key: "fortgeschrittene", label: "Fortgeschrittene" }, { key: "alle", label: "Alle Niveaus" }],
     wochentag: [{ key: "montag", label: "Montag" }, { key: "dienstag", label: "Dienstag" }, { key: "mittwoch", label: "Mittwoch" }, { key: "donnerstag", label: "Donnerstag" }, { key: "freitag", label: "Freitag" }, { key: "samstag", label: "Samstag" }, { key: "sonntag", label: "Sonntag" }],
   },
-  teilnehmer_anmeldung: {
+  'teilnehmer_anmeldung': {
     erfahrungslevel: [{ key: "anfaenger", label: "Anfänger" }, { key: "mittelstufe", label: "Mittelstufe" }, { key: "fortgeschrittene", label: "Fortgeschrittene" }],
   },
 };
@@ -118,8 +118,8 @@ export const FIELD_TYPES: Record<string, Record<string, string>> = {
 };
 
 type StripLookup<T> = {
-  [K in keyof T]: T[K] extends LookupValue | undefined ? string | undefined
-    : T[K] extends LookupValue[] | undefined ? string[] | undefined
+  [K in keyof T]: T[K] extends LookupValue | undefined ? string | LookupValue | undefined
+    : T[K] extends LookupValue[] | undefined ? string[] | LookupValue[] | undefined
     : T[K];
 };
 

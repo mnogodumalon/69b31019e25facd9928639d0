@@ -15,8 +15,8 @@ import {
   SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Camera, CheckCircle2, FileText, ImagePlus, Loader2, Sparkles, Upload, X } from 'lucide-react';
-import { fileToDataUri, extractFromPhoto, extractPhotoMeta, reverseGeocode } from '@/lib/ai';
+import { IconArrowBigDownLinesFilled, IconCamera, IconCircleCheck, IconClipboard, IconFileText, IconLoader2, IconPhotoPlus, IconSparkles, IconUpload, IconX } from '@tabler/icons-react';
+import { fileToDataUri, extractFromInput, extractPhotoMeta, reverseGeocode } from '@/lib/ai';
 import { lookupKey } from '@/lib/formatters';
 
 interface TeilnehmerAnmeldungDialogProps {
@@ -29,7 +29,7 @@ interface TeilnehmerAnmeldungDialogProps {
   enablePhotoLocation?: boolean;
 }
 
-export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValues, kurs_verwaltungList, enablePhotoScan = false, enablePhotoLocation = true }: TeilnehmerAnmeldungDialogProps) {
+export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValues, kurs_verwaltungList, enablePhotoScan = true, enablePhotoLocation = true }: TeilnehmerAnmeldungDialogProps) {
   const [fields, setFields] = useState<Partial<TeilnehmerAnmeldung['fields']>>({});
   const [saving, setSaving] = useState(false);
   const [scanning, setScanning] = useState(false);
@@ -44,12 +44,14 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
   const [showProfileInfo, setShowProfileInfo] = useState(false);
   const [profileData, setProfileData] = useState<Record<string, unknown> | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [aiText, setAiText] = useState('');
 
   useEffect(() => {
     if (open) {
       setFields(defaultValues ?? {});
       setPreview(null);
       setScanSuccess(false);
+      setAiText('');
     }
   }, [open, defaultValues]);
   useEffect(() => {
@@ -81,22 +83,28 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
     }
   }
 
-  async function handlePhotoScan(file: File) {
+  async function handleAiExtract(file?: File) {
+    if (!file && !aiText.trim()) return;
     setScanning(true);
     setScanSuccess(false);
     try {
-      const [uri, meta] = await Promise.all([fileToDataUri(file), extractPhotoMeta(file)]);
-      if (file.type.startsWith('image/')) setPreview(uri);
-      const gps = enablePhotoLocation ? meta?.gps ?? null : null;
-      const parts: string[] = [];
+      let uri: string | undefined;
+      let gps: { latitude: number; longitude: number } | null = null;
       let geoAddr = '';
-      if (gps) {
-        geoAddr = await reverseGeocode(gps.latitude, gps.longitude);
-        parts.push(`Location coordinates: ${gps.latitude}, ${gps.longitude}`);
-        if (geoAddr) parts.push(`Reverse-geocoded address: ${geoAddr}`);
-      }
-      if (meta?.dateTime) {
-        parts.push(`Date taken: ${meta.dateTime.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3')}`);
+      const parts: string[] = [];
+      if (file) {
+        const [dataUri, meta] = await Promise.all([fileToDataUri(file), extractPhotoMeta(file)]);
+        uri = dataUri;
+        if (file.type.startsWith('image/')) setPreview(uri);
+        gps = enablePhotoLocation ? meta?.gps ?? null : null;
+        if (gps) {
+          geoAddr = await reverseGeocode(gps.latitude, gps.longitude);
+          parts.push(`Location coordinates: ${gps.latitude}, ${gps.longitude}`);
+          if (geoAddr) parts.push(`Reverse-geocoded address: ${geoAddr}`);
+        }
+        if (meta?.dateTime) {
+          parts.push(`Date taken: ${meta.dateTime.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3')}`);
+        }
       }
       const contextParts: string[] = [];
       if (parts.length) {
@@ -113,7 +121,12 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
       }
       const photoContext = contextParts.length ? contextParts.join('\n') : undefined;
       const schema = `{\n  "gesundheitshinweise": string | null, // Gesundheitliche Hinweise / Anmerkungen\n  "anmeldedatum": string | null, // YYYY-MM-DD\n  "einverstaendnis": boolean | null, // Ich stimme der Teilnahme und den Kursbedingungen zu\n  "teilnehmer_vorname": string | null, // Vorname\n  "teilnehmer_nachname": string | null, // Nachname\n  "teilnehmer_email": string | null, // E-Mail-Adresse\n  "teilnehmer_telefon": string | null, // Telefonnummer\n  "geburtsdatum": string | null, // YYYY-MM-DD\n  "kurs": string | null, // Display name from Kurs-Verwaltung (see <available-records>)\n  "erfahrungslevel": LookupValue | null, // Dein Erfahrungslevel (select one key: "anfaenger" | "mittelstufe" | "fortgeschrittene") mapping: anfaenger=Anfänger, mittelstufe=Mittelstufe, fortgeschrittene=Fortgeschrittene\n}`;
-      const raw = await extractFromPhoto<Record<string, unknown>>(uri, schema, photoContext, DIALOG_INTENT);
+      const raw = await extractFromInput<Record<string, unknown>>(schema, {
+        dataUri: uri,
+        userText: aiText.trim() || undefined,
+        photoContext,
+        intent: DIALOG_INTENT,
+      });
       setFields(prev => {
         const merged = { ...prev } as Record<string, unknown>;
         function matchName(name: string, candidates: string[]): boolean {
@@ -132,6 +145,7 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
         }
         return merged as Partial<TeilnehmerAnmeldung['fields']>;
       });
+      setAiText('');
       setScanSuccess(true);
       setTimeout(() => setScanSuccess(false), 3000);
     } catch (err) {
@@ -144,7 +158,7 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
-    if (f) handlePhotoScan(f);
+    if (f) handleAiExtract(f);
     e.target.value = '';
   }
 
@@ -166,7 +180,7 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
     setDragOver(false);
     const file = e.dataTransfer.files?.[0];
     if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
-      handlePhotoScan(file);
+      handleAiExtract(file);
     }
   }, []);
 
@@ -183,10 +197,10 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
           <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
             <div>
               <div className="flex items-center gap-1.5 font-medium">
-                <Sparkles className="h-4 w-4 text-primary" />
+                <IconSparkles className="h-4 w-4 text-primary" />
                 KI-Assistent
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">Versteht deine Fotos / Dokumente und füllt alles für dich aus</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Versteht Fotos, Dokumente und Text und füllt alles für dich aus</p>
             </div>
             <div className="flex items-start gap-2 pl-0.5">
               <Checkbox
@@ -239,7 +253,7 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
               {scanning ? (
                 <div className="flex flex-col items-center justify-center py-8 gap-3">
                   <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Loader2 className="h-7 w-7 text-primary animate-spin" />
+                    <IconLoader2 className="h-7 w-7 text-primary animate-spin" />
                   </div>
                   <div className="text-center">
                     <p className="text-sm font-medium">KI analysiert...</p>
@@ -249,7 +263,7 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
               ) : scanSuccess ? (
                 <div className="flex flex-col items-center justify-center py-8 gap-3">
                   <div className="h-14 w-14 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <CheckCircle2 className="h-7 w-7 text-green-600 dark:text-green-400" />
+                    <IconCircleCheck className="h-7 w-7 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="text-center">
                     <p className="text-sm font-medium text-green-700 dark:text-green-400">Felder ausgefüllt!</p>
@@ -259,7 +273,7 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
               ) : (
                 <div className="flex flex-col items-center justify-center py-8 gap-3">
                   <div className="h-14 w-14 rounded-full bg-primary/8 flex items-center justify-center">
-                    <ImagePlus className="h-7 w-7 text-primary/70" />
+                    <IconPhotoPlus className="h-7 w-7 text-primary/70" />
                   </div>
                   <div className="text-center">
                     <p className="text-sm font-medium">Foto oder Dokument hierher ziehen oder auswählen</p>
@@ -274,25 +288,25 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
                     <button
                       type="button"
                       onClick={e => { e.stopPropagation(); setPreview(null); }}
-                      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-muted-foreground/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-muted-foreground/80 text-white flex items-center justify-center"
                     >
-                      <X className="h-2.5 w-2.5" />
+                      <IconX className="h-2.5 w-2.5" />
                     </button>
                   </div>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-2">
-              <Button type="button" variant="outline" size="sm" className="flex-1 h-9 text-xs" disabled={scanning}
+            <div className="grid grid-cols-3 gap-2">
+              <Button type="button" variant="outline" size="sm" className="h-10 text-xs" disabled={scanning}
                 onClick={e => { e.stopPropagation(); cameraInputRef.current?.click(); }}>
-                <Camera className="h-3.5 w-3.5 mr-1.5" />Kamera
+                <IconCamera className="h-3.5 w-3.5 mr-1" />Kamera
               </Button>
-              <Button type="button" variant="outline" size="sm" className="flex-1 h-9 text-xs" disabled={scanning}
+              <Button type="button" variant="outline" size="sm" className="h-10 text-xs" disabled={scanning}
                 onClick={e => { e.stopPropagation(); fileInputRef.current?.click(); }}>
-                <Upload className="h-3.5 w-3.5 mr-1.5" />Foto wählen
+                <IconUpload className="h-3.5 w-3.5 mr-1" />Foto wählen
               </Button>
-              <Button type="button" variant="outline" size="sm" className="flex-1 h-9 text-xs" disabled={scanning}
+              <Button type="button" variant="outline" size="sm" className="h-10 text-xs" disabled={scanning}
                 onClick={e => {
                   e.stopPropagation();
                   if (fileInputRef.current) {
@@ -301,8 +315,59 @@ export function TeilnehmerAnmeldungDialog({ open, onClose, onSubmit, defaultValu
                     setTimeout(() => { if (fileInputRef.current) fileInputRef.current.accept = 'image/*,application/pdf'; }, 100);
                   }
                 }}>
-                <FileText className="h-3.5 w-3.5 mr-1.5" />Dokument
+                <IconFileText className="h-3.5 w-3.5 mr-1" />Dokument
               </Button>
+            </div>
+
+            <div className="relative">
+              <Textarea
+                placeholder="Text eingeben oder einfügen, z.B. Notizen, E-Mails, Beschreibungen..."
+                value={aiText}
+                onChange={e => {
+                  setAiText(e.target.value);
+                  const el = e.target;
+                  el.style.height = 'auto';
+                  el.style.height = Math.min(Math.max(el.scrollHeight, 56), 96) + 'px';
+                }}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && aiText.trim() && !scanning) {
+                    e.preventDefault();
+                    handleAiExtract();
+                  }
+                }}
+                disabled={scanning}
+                rows={2}
+                className="pr-12 resize-none text-sm overflow-y-auto"
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-2 h-8 w-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                disabled={scanning}
+                onClick={async () => {
+                  try {
+                    const text = await navigator.clipboard.readText();
+                    if (text) setAiText(prev => prev ? prev + '\n' + text : text);
+                  } catch {}
+                }}
+                title="Paste"
+              >
+                <IconClipboard className="h-4 w-4" />
+              </button>
+            </div>
+            {aiText.trim() && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full h-9 text-xs"
+                disabled={scanning}
+                onClick={() => handleAiExtract()}
+              >
+                <IconSparkles className="h-3.5 w-3.5 mr-1.5" />Analysieren
+              </Button>
+            )}
+            <div className="flex justify-center pt-1">
+              <IconArrowBigDownLinesFilled className="h-8 w-8 text-muted-foreground/30" />
             </div>
           </div>
         )}

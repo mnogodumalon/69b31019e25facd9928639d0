@@ -9,7 +9,7 @@ import {
   TableHeader, TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Trash2, Plus, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { IconPencil, IconTrash, IconPlus, IconSearch, IconArrowsUpDown, IconArrowUp, IconArrowDown } from '@tabler/icons-react';
 import { TeilnehmerAnmeldungDialog } from '@/components/dialogs/TeilnehmerAnmeldungDialog';
 import { TeilnehmerAnmeldungViewDialog } from '@/components/dialogs/TeilnehmerAnmeldungViewDialog';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
@@ -123,12 +123,12 @@ export default function TeilnehmerAnmeldungPage() {
       subtitle={`${records.length} Teilnehmer-Anmeldung im System`}
       action={
         <Button onClick={() => setDialogOpen(true)} className="shrink-0 rounded-full shadow-sm">
-          <Plus className="h-4 w-4 mr-2" /> Hinzufügen
+          <IconPlus className="h-4 w-4 mr-2" /> Hinzufügen
         </Button>
       }
     >
       <div className="relative w-full max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Teilnehmer-Anmeldung suchen..."
           value={search}
@@ -143,61 +143,61 @@ export default function TeilnehmerAnmeldungPage() {
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('gesundheitshinweise')}>
                 <span className="inline-flex items-center gap-1">
                   Gesundheitliche Hinweise / Anmerkungen
-                  {sortKey === 'gesundheitshinweise' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'gesundheitshinweise' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('anmeldedatum')}>
                 <span className="inline-flex items-center gap-1">
                   Anmeldedatum
-                  {sortKey === 'anmeldedatum' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'anmeldedatum' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('einverstaendnis')}>
                 <span className="inline-flex items-center gap-1">
                   Ich stimme der Teilnahme und den Kursbedingungen zu
-                  {sortKey === 'einverstaendnis' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'einverstaendnis' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('teilnehmer_vorname')}>
                 <span className="inline-flex items-center gap-1">
                   Vorname
-                  {sortKey === 'teilnehmer_vorname' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'teilnehmer_vorname' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('teilnehmer_nachname')}>
                 <span className="inline-flex items-center gap-1">
                   Nachname
-                  {sortKey === 'teilnehmer_nachname' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'teilnehmer_nachname' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('teilnehmer_email')}>
                 <span className="inline-flex items-center gap-1">
                   E-Mail-Adresse
-                  {sortKey === 'teilnehmer_email' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'teilnehmer_email' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('teilnehmer_telefon')}>
                 <span className="inline-flex items-center gap-1">
                   Telefonnummer
-                  {sortKey === 'teilnehmer_telefon' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'teilnehmer_telefon' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('geburtsdatum')}>
                 <span className="inline-flex items-center gap-1">
                   Geburtsdatum
-                  {sortKey === 'geburtsdatum' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'geburtsdatum' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('kurs')}>
                 <span className="inline-flex items-center gap-1">
                   Kurs
-                  {sortKey === 'kurs' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'kurs' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort('erfahrungslevel')}>
                 <span className="inline-flex items-center gap-1">
                   Dein Erfahrungslevel
-                  {sortKey === 'erfahrungslevel' ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                  {sortKey === 'erfahrungslevel' ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                 </span>
               </TableHead>
               <TableHead className="w-24 uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6">Aktionen</TableHead>
@@ -219,10 +219,10 @@ export default function TeilnehmerAnmeldungPage() {
                 <TableCell>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => setEditingRecord(record)}>
-                      <Pencil className="h-4 w-4" />
+                      <IconPencil className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(record)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <IconTrash className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
                 </TableCell>

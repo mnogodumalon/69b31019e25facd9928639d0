@@ -24,7 +24,7 @@ import {
   SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Pencil, Trash2, Plus, Filter, X, ArrowUpDown, ArrowUp, ArrowDown, Search, Copy, FileText } from 'lucide-react';
+import { IconPencil, IconTrash, IconPlus, IconFilter, IconX, IconArrowsUpDown, IconArrowUp, IconArrowDown, IconSearch, IconCopy, IconFileText } from '@tabler/icons-react';
 import { format, parseISO } from 'date-fns';
 import { de } from 'date-fns/locale';
 
@@ -85,14 +85,14 @@ export default function AdminPage() {
 
   const [activeTab, setActiveTab] = useState<EntityKey>('kursleiter_verwaltung');
   const [selectedIds, setSelectedIds] = useState<Record<EntityKey, Set<string>>>(() => ({
-    kursleiter_verwaltung: new Set(),
-    kurs_verwaltung: new Set(),
-    teilnehmer_anmeldung: new Set(),
+    'kursleiter_verwaltung': new Set(),
+    'kurs_verwaltung': new Set(),
+    'teilnehmer_anmeldung': new Set(),
   }));
   const [filters, setFilters] = useState<Record<EntityKey, Record<string, string>>>(() => ({
-    kursleiter_verwaltung: {},
-    kurs_verwaltung: {},
-    teilnehmer_anmeldung: {},
+    'kursleiter_verwaltung': {},
+    'kurs_verwaltung': {},
+    'teilnehmer_anmeldung': {},
   }));
   const [showFilters, setShowFilters] = useState(false);
   const [dialogState, setDialogState] = useState<{ entity: EntityKey; record: any } | null>(null);
@@ -378,7 +378,7 @@ export default function AdminPage() {
       subtitle="Alle Daten verwalten"
       action={
         <Button onClick={() => setCreateEntity(activeTab)} className="shrink-0">
-          <Plus className="h-4 w-4 mr-2" /> Hinzufügen
+          <IconPlus className="h-4 w-4 mr-2" /> Hinzufügen
         </Button>
       }
     >
@@ -405,7 +405,7 @@ export default function AdminPage() {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2">
           <div className="relative w-full max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Suchen..."
               value={search}
@@ -414,7 +414,7 @@ export default function AdminPage() {
             />
           </div>
           <Button variant="outline" size="sm" onClick={() => setShowFilters(f => !f)} className="gap-2">
-            <Filter className="h-4 w-4" />
+            <IconFilter className="h-4 w-4" />
             Filtern
             {activeFilterCount > 0 && (
               <Badge variant="secondary" className="ml-1">{activeFilterCount}</Badge>
@@ -430,16 +430,16 @@ export default function AdminPage() {
           <div className="flex items-center gap-2 flex-wrap bg-muted/60 rounded-lg px-3 py-1.5">
             <span className="text-sm font-medium">{sel.size} ausgewählt</span>
             <Button variant="outline" size="sm" onClick={() => setBulkEditOpen(activeTab)}>
-              <Pencil className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Feld bearbeiten</span>
+              <IconPencil className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Feld bearbeiten</span>
             </Button>
             <Button variant="outline" size="sm" onClick={() => handleBulkClone()}>
-              <Copy className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Kopieren</span>
+              <IconCopy className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Kopieren</span>
             </Button>
             <Button variant="destructive" size="sm" onClick={() => setDeleteTargets({ entity: activeTab, ids: Array.from(sel) })}>
-              <Trash2 className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Ausgewählte löschen</span>
+              <IconTrash className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Ausgewählte löschen</span>
             </Button>
             <Button variant="ghost" size="sm" onClick={() => clearSelection(activeTab)}>
-              <X className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Auswahl aufheben</span>
+              <IconX className="h-3.5 w-3.5 sm:mr-1" /> <span className="hidden sm:inline">Auswahl aufheben</span>
             </Button>
           </div>
         )}
@@ -496,7 +496,7 @@ export default function AdminPage() {
                 <TableHead key={fm.key} className="uppercase text-xs font-semibold text-secondary-foreground tracking-wider px-6 cursor-pointer select-none hover:text-foreground transition-colors" onClick={() => toggleSort(fm.key)}>
                   <span className="inline-flex items-center gap-1">
                     {fm.label}
-                    {sortKey === fm.key ? (sortDir === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />) : <ArrowUpDown size={14} className="opacity-30" />}
+                    {sortKey === fm.key ? (sortDir === 'asc' ? <IconArrowUp size={14} /> : <IconArrowDown size={14} />) : <IconArrowsUpDown size={14} className="opacity-30" />}
                   </span>
                 </TableHead>
               ))}
@@ -565,10 +565,10 @@ export default function AdminPage() {
                 <TableCell>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => setDialogState({ entity: activeTab, record })}>
-                      <Pencil className="h-4 w-4" />
+                      <IconPencil className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => setDeleteTargets({ entity: activeTab, ids: [record.record_id] })}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <IconTrash className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
                 </TableCell>
